@@ -1,11 +1,13 @@
 ---
 import MatrixForm from '@/components/MatrixForm'
 import Layout from '@/Layouts/Layout.astro'
+import ShowMatrixes from '@/components/ShowMatrixes'
 ---
 
 <Layout>
   <h1>Astro</h1>
   <main class="">
     <MatrixForm client:visible />
+    <ShowMatrixes client:visible />
   </main>
 </Layout>
