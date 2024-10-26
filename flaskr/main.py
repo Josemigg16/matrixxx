@@ -9,7 +9,7 @@ CORS(app)
 
 @app.route('/')
 def hello():
-    matriz = Matrixxx([[4,-2,0], [-7, 4, 1], [1, 2, 3]])
+    matriz = Matrixxx([[7,-2,0], [-7, 4, 1], [1, 2, 3]])
     matriz.show()
     matriz.transpose()
     matriz.inverse()
@@ -20,12 +20,8 @@ def hello():
 def upload():
     if request.is_json:
         data = request.get_json()
-
-        matrix =Matrixxx(data)
-        matrix.show()
-        data = matrix.inverse()
-        print(type(data))
-        return data
+        print(data)
+        return 'Upload'
 
 
 app.register_blueprint(api_blueprint, url_prefix='/api')

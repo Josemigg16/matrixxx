@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import Select from './Select'
 import type { FormEvent } from 'preact/compat'
+import { matrixStore } from '@/stores/MatrixStore'
 
 export default function MatrixForm() {
 	const [rows, setRows] = useState(3)
@@ -19,24 +20,19 @@ export default function MatrixForm() {
 		})
 		console.log(matrix)
 		try {
-            // Enviamos la matriz al backend
-            const response = await fetch('http://localhost:5000/api/upload', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(matrix),
-            })
-
-            // Obtenemos la respuesta del backend
-            const result = await response.json()
-
-            // Mostramos la matriz inversa en la consola del navegador
-            console.log("Matriz inversa recibida:", result)
-
-        } catch (e) {
-            console.error("Error:", e)
-        }
+			const res = await fetch('http://localhost:5000/api/upload', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(matrix)
+			})
+			const newMatrix = await res.json()
+			matrixStore.set([...matrixStore.get(), newMatrix])
+		} catch(e)
+		{
+			console.log(e)
+		}
 	}
 
 	return (
