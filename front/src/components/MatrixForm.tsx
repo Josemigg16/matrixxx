@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import Select from './Select'
 import type { FormEvent } from 'preact/compat'
+import { matrixStore } from '@/stores/MatrixStore'
 
 export default function MatrixForm() {
 	const [rows, setRows] = useState(3)
 	const [columns, setColumns] = useState(3)
 
-	const handleSubmit = (e: FormEvent) => {
+	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault()
 		const matrix: string[][] = []
 		const inputs = document.querySelector('tbody')
@@ -19,13 +20,15 @@ export default function MatrixForm() {
 		})
 		console.log(matrix)
 		try {
-			fetch('http://localhost:5000/api/upload', {
+			const res = await fetch('http://localhost:5000/api/upload', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify(matrix)
 			})
+			const newMatrix = await res.json()
+			matrixStore.set([...matrixStore.get(), newMatrix])
 		} catch(e)
 		{
 			console.log(e)
