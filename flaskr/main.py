@@ -20,8 +20,12 @@ def hello():
 def upload():
     if request.is_json:
         data = request.get_json()
-        print(data)
-    return 'Upload'
+
+        matrix =Matrixxx(data)
+        matrix.show()
+        data = matrix.inverse()
+        print(type(data))
+        return data
 
 
 app.register_blueprint(api_blueprint, url_prefix='/api')

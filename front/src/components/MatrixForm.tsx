@@ -6,7 +6,7 @@ export default function MatrixForm() {
 	const [rows, setRows] = useState(3)
 	const [columns, setColumns] = useState(3)
 
-	const handleSubmit = (e: FormEvent) => {
+	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault()
 		const matrix: string[][] = []
 		const inputs = document.querySelector('tbody')
@@ -19,18 +19,26 @@ export default function MatrixForm() {
 		})
 		console.log(matrix)
 		try {
-			fetch('http://localhost:5000/api/upload', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(matrix)
-			})
-		} catch(e)
-		{
-			console.log(e)
-		}
+            // Enviamos la matriz al backend
+            const response = await fetch('http://localhost:5000/api/upload', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(matrix),
+            })
+
+            // Obtenemos la respuesta del backend
+            const result = await response.json()
+
+            // Mostramos la matriz inversa en la consola del navegador
+            console.log("Matriz inversa recibida:", result)
+
+        } catch (e) {
+            console.error("Error:", e)
+        }
 	}
+
 	return (
 		<article>
 			<form class='mx-auto mb-20 w-[300px] space-y-2'>
@@ -56,7 +64,7 @@ export default function MatrixForm() {
 								<tr>
 									{Array.from({ length: columns }).map((_, j) => {
 										return (
-											<td>
+											<td key={`${i}-${j}`}>
 												<input
 													id={`1-input--${i + 1}-${j + 1}`}
 													class='h-8 w-10 text-center outline-none focus-within:bg-slate-200'
