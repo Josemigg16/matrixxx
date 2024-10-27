@@ -1,4 +1,4 @@
-from flask import Flask,request, Blueprint
+from flask import Flask,request, Blueprint, jsonify, json
 from flask_cors import CORS
 from objects.matrixxx import Matrixxx
 
@@ -9,7 +9,7 @@ CORS(app)
 
 @app.route('/')
 def hello():
-    matriz = Matrixxx([[7,-2,0], [-7, 4, 1], [1, 2, 3]])
+    matriz = Matrixxx([[4,-2,0], [-7, 4, 1], [1, 2, 3]])
     matriz.show()
     matriz.transpose()
     matriz.inverse()
@@ -20,9 +20,15 @@ def hello():
 def upload():
     if request.is_json:
         data = request.get_json()
-        print(data)
-        return 'Upload'
+        print('recived data')
+    return Matrixxx(data).inverse()
 
+
+@api_blueprint.route('/lu')
+def lu():
+    sampleMatrix= [[4, -2, 0], [-7, 4, 1], [1, 2, 3]]
+    data = Matrixxx(sampleMatrix).lu()
+    return jsonify(json.loads(data))
 
 app.register_blueprint(api_blueprint, url_prefix='/api')
 app.run(debug=True)

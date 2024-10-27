@@ -1,35 +1,40 @@
+from fractions import Fraction
 import numpy as np
+import json
 
-def factorizacion_LU(A):
-    A = np.array(A, dtype=float)  # Convertir A a un array de tipo float
-    n = len(A)  # Obtener el tamaño de la matriz
-    L = np.zeros((n, n))  # Inicializar matriz L
-    U = np.zeros((n, n))  # Inicializar matriz U
+def lu_factorizacion(A):
+    # Convertimos la matriz A a un array de fracciones
+    A = np.array([[Fraction(x) for x in row] for row in A], dtype=object)
+    n = len(A)
+    L = np.eye(n, dtype=object)  # Matriz identidad como base para L
+    U = A.copy()  # Copiamos A como base para U
+    recap = {
+        'pasos': [],  
+        'L': None,  
+        'U': None   
+    }
     
-    # Iniciar la factorización LU
+    # Eliminar los elementos debajo de la diagonal (eliminación gaussiana)
     for i in range(n):
-        print(f"\nPaso {i+1}:")
+        # Asegurarse de que no estamos dividiendo por cero
+        if U[i, i] == 0:
+            raise ValueError(f"El pivote en la posición ({i+1},{i+1}) es cero. Se requiere un pivote distinto de cero para la factorización LU.")
         
-        # Calcular U
-        for j in range(i, n):
-            suma = np.sum(L[i, :i] * U[:i, j])  # Sumar productos anteriores
-            U[i, j] = A[i, j] - suma  # Calcular elemento de U
-            print(f"Calculando U[{i+1},{j+1}] = A[{i+1},{j+1}] - suma = {A[i, j]} - {suma:.4f} => U[{i+1},{j+1}] = {U[i, j]:.4f}")
+        # Hacer ceros debajo de la diagonal en la columna i
+        for j in range(i+1, n):
+            factor = U[j, i] / U[i, i]  # Este es el número por el cual multiplicamos la fila i para eliminar el elemento U[j, i]
+            L[j, i] = factor  # Guardamos el factor en la matriz L
+            U[j] = U[j] - factor * U[i]  # Restamos el múltiplo de la fila i de la fila j para hacer cero en la posición (j, i)
+            
+            # Guardamos este paso en el recap
+            recap['pasos'].append({
+                'text': f"Restar {factor} * fila {i+1} a la fila {j+1} para hacer cero el elemento U[{j+1},{i+1}]",
+                'U': [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in U.tolist()],
+                'L': [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in L.tolist()]
+            })
 
-        # Calcular L
-        for j in range(i + 1, n):
-            suma = np.sum(L[j, :i] * U[:i, i])  # Sumar productos anteriores
-            L[j, i] = (A[j, i] - suma) / U[i, i]  # Calcular elemento de L
-            print(f"Calculando L[{j+1},{i+1}] = (A[{j+1},{i+1}] - suma) / U[{i+1},{i+1}] = ({A[j, i]} - {suma:.4f}) / {U[i, i]:.4f} => L[{j+1},{i+1}] = {L[j, i]:.4f}")
-    
-    # L debe tener 1s en la diagonal
-    np.fill_diagonal(L, 1)
-    
-    print("\nMatriz L final:\n", L)
-    print("Matriz U final:\n", U)
-    
-    return L, U
+    # Convertimos las matrices L y U a fracciones legibles
+    recap['L'] = [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in L.tolist()]
+    recap['U'] = [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in U.tolist()]
 
-# Ejemplo de uso
-A = [[4, 3], [6, 3]]
-L, U = factorizacion_LU(A)
+    return json.dumps(recap, indent=4)

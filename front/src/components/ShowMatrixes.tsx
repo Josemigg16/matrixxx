@@ -5,16 +5,16 @@ import MatrixElement from './MatrixElement'
 
 const ShowMatrixes = () => {
 	const MatrixState = useStore(matrixStore)
-
+	console.log(MatrixState)
 	useEffect(() => {
-		MatrixState.map((a) => console.log(a.Aumentada))
+		MatrixState.map((a) => console.log(a.Inversa))
 	}, [MatrixState])
 	return (
 		<ul class='mt-20 flex flex-col items-center gap-4'>
 			{MatrixState.toReversed().map((matrix) => (
 				<li class='bg-slate-700'>
 					<table>
-						{matrix?.Aumentada.map((fila) => (
+						{matrix?.Inversa.map((fila) => (
 							<tr>
 								{fila.map((celda) => (
 									<td>

@@ -28,6 +28,8 @@ export default function MatrixForm() {
 				body: JSON.stringify(matrix)
 			})
 			const newMatrix = await res.json()
+			console.log(res.json)
+			console.log('aaaaa')
 			matrixStore.set([...matrixStore.get(), newMatrix])
 		} catch(e)
 		{
