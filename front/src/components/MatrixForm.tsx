@@ -28,12 +28,15 @@ export default function MatrixForm() {
 				body: JSON.stringify(matrix)
 			})
 			const newMatrix = await res.json()
+			console.log(res.json)
+			console.log('aaaaa')
 			matrixStore.set([...matrixStore.get(), newMatrix])
 		} catch(e)
 		{
 			console.log(e)
 		}
 	}
+
 	return (
 		<article>
 			<form class='mx-auto mb-20 w-[300px] space-y-2'>
@@ -59,7 +62,7 @@ export default function MatrixForm() {
 								<tr>
 									{Array.from({ length: columns }).map((_, j) => {
 										return (
-											<td>
+											<td key={`${i}-${j}`}>
 												<input
 													id={`1-input--${i + 1}-${j + 1}`}
 													class='h-8 w-10 text-center outline-none focus-within:bg-slate-200'
