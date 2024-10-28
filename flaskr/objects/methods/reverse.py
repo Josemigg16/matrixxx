@@ -4,6 +4,7 @@ import numpy as np
 
 def inversa_matriz(A):
     # Convertimos la matriz A a un array de fracciones
+    original = A
     A = np.array([[Fraction(x) for x in row] for row in A], dtype=object)
     n = len(A)
     counter = 0
@@ -12,6 +13,7 @@ def inversa_matriz(A):
     identidad = np.array([[Fraction(x) for x in row] for row in identidad], dtype=object)
     Aumentada = np.hstack((A, identidad))
     recap = {
+        'Original': original.tolist(),
         'Aumentada': [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in Aumentada.tolist()],
         'Equivalentes': []
     }

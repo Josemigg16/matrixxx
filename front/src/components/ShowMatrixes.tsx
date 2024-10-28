@@ -1,29 +1,23 @@
 import { matrixStore } from '@/stores/MatrixStore'
 import { useStore } from '@nanostores/preact'
 import { useEffect } from 'preact/hooks'
-import MatrixElement from './MatrixElement'
+import MatrixComponent from './MatrixComponent'
+import Paren from './svg/Paren'
 
 const ShowMatrixes = () => {
 	const MatrixState = useStore(matrixStore)
 	console.log(MatrixState)
 	useEffect(() => {
-		MatrixState.map((a) => console.log(a.Inversa))
+		MatrixState.map((a) => console.log(a))
 	}, [MatrixState])
 	return (
 		<ul class='mt-20 flex flex-col items-center gap-4'>
 			{MatrixState.toReversed().map((matrix) => (
-				<li class='bg-slate-700'>
-					<table>
-						{matrix?.Inversa.map((fila) => (
-							<tr>
-								{fila.map((celda) => (
-									<td>
-										<MatrixElement number={celda} />
-									</td>
-								))}
-							</tr>
-						))}
-					</table>
+				<li class='bg-slate-700 flex items-center'>
+					<div class='paren w-10 h-10 z-10'>.</div>
+					<MatrixComponent matrix={matrix.Original} />
+					{')'}
+					<MatrixComponent matrix={matrix.Inversa} />
 				</li>
 			))}
 		</ul>
