@@ -11,28 +11,30 @@ export default function MatrixForm() {
 		e.preventDefault()
 		const matrix: string[][] = []
 		const inputs = document.querySelector('tbody')
-		inputs?.childNodes.forEach((element) => {
+		inputs?.querySelectorAll('tr').forEach((element) => {
 			const rowMatrix: string[] = []
-			element.childNodes.forEach((element) => {
-				rowMatrix.push((element.firstChild as HTMLInputElement).value)
+			element.querySelectorAll('input').forEach((element) => {
+				rowMatrix.push(element.value)
 			})
 			matrix.push(rowMatrix)
 		})
-		console.log(matrix)
+		const fixedMatrix = matrix.map((row) =>
+			row.map((element) => (element.trim() === '' ? '0' : element.trim()))
+		)
+		console.log(fixedMatrix)
 		try {
 			const res = await fetch('http://localhost:5000/api/upload', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(matrix)
+				body: JSON.stringify(fixedMatrix)
 			})
 			const newMatrix = await res.json()
 			console.log(res.json)
 			console.log('aaaaa')
 			matrixStore.set([...matrixStore.get(), newMatrix])
-		} catch(e)
-		{
+		} catch (e) {
 			console.log(e)
 		}
 	}
@@ -56,7 +58,7 @@ export default function MatrixForm() {
 							<th></th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id='matrix-form'>
 						{Array.from({ length: rows }).map((_, i) => {
 							return (
 								<tr>
@@ -78,6 +80,18 @@ export default function MatrixForm() {
 				</table>
 				<button class='mt-2 block w-full rounded bg-gray-100 p-2 font-bold' type='submit'>
 					Submit
+				</button>
+				<button
+					onClick={() => {
+						const inputs = document.getElementById('matrix-form')
+						inputs?.querySelectorAll('input').forEach((element) => {
+							element.value = Math.floor(Math.random() * 10).toString()
+						})
+					}}
+					class='mt-2 block w-full rounded bg-gray-100 p-2 font-bold'
+					type='button'
+				>
+					Random Array
 				</button>
 			</form>
 		</article>
