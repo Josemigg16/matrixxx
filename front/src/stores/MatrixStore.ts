@@ -1,10 +1,11 @@
 import { atom } from "nanostores";
 
-interface OPMatrix {
+export interface OPMatrix {
     Original: string[][],
     Aumentada: string[][],
     Equivalentes: Equivalentes[],
     Inversa: string[][]
+    operacion: string
 }
 
 interface Equivalentes {
