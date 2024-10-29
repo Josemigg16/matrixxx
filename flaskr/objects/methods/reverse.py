@@ -15,7 +15,8 @@ def inversa_matriz(A):
     recap = {
         'Original': original.tolist(),
         'Aumentada': [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in Aumentada.tolist()],
-        'Equivalentes': []
+        'Equivalentes': [],
+        'operacion': 'inversa'
     }
     print("Matriz aumentada inicial:\n", Aumentada)
     
@@ -61,7 +62,7 @@ def inversa_matriz(A):
                 print(f"Matriz después de hacer cero el elemento A[{j+1},{i+1}]:\n", Aumentada)
     
 
-    recap['Inversa'] = [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in Aumentada.tolist()]
+    recap['Inversa'] = [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in Aumentada[:,n:].tolist()]
     
     return json.dumps(recap)
 
