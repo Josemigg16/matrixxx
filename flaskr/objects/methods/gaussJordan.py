@@ -2,7 +2,7 @@ from fractions import Fraction
 import json
 import numpy as np
 
-def inversa_matriz(A):
+def gauss_jordan(A):
     # Convertimos la matriz A a un array de fracciones
     original = A
     A = np.array([[Fraction(x) for x in row] for row in A], dtype=object)
@@ -50,7 +50,7 @@ def inversa_matriz(A):
         
         for j in range(n):
             if j != i:
-                text = f"Haciendo cero el elemento A[{j+1},{i+1}] restando la fila {j + 1} menos la la fila {i+1} multiplicada por {Aumentada[j, i]}"
+                text = f"Haciendo cero el elemento A[{j+1},{i+1}] restando la fila {j + 1} menos la fila {i+1} multiplicada por {Aumentada[j, i]}"
                 print(text)
                 Aumentada[j] = Aumentada[j] - Aumentada[j, i] * Aumentada[i]
                 eq = [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in Aumentada.tolist()]
@@ -61,9 +61,6 @@ def inversa_matriz(A):
                     })
                 print(f"Matriz después de hacer cero el elemento A[{j+1},{i+1}]:\n", Aumentada)
     
-
     recap['Inversa'] = [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in Aumentada[:,n:].tolist()]
     
     return json.dumps(recap)
-
-
