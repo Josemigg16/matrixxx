@@ -5,7 +5,7 @@ export default function MatrixElement({ number }: { number: string }) {
 	}
 
 	return (
-		<div class='relative mx-3 flex flex-col h-[40px] justify-center text-center'>
+		<div class='relative mx-3 flex flex-col h-[35px] justify-center text-center'>
 			<span class='-mb-1'>{formatedNumber.numerator}</span>
 			{formatedNumber.numerator !== '0' && formatedNumber.denominator !== '1' && (
 				<>

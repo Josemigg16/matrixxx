@@ -5,7 +5,7 @@ interface Props {
 }
 
 export default function Select({ value, setValue }: Props) {
-	const options = Array.from({ length: 10 }, (_, i) => i + 1)
+	const options = Array.from({ length: 20 }, (_, i) => i + 1)
 
 	return (
 		<div class='flex justify-end'>
