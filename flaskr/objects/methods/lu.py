@@ -9,7 +9,7 @@ def lu_factorizacion(A):
     L = np.eye(n, dtype=object)  # Matriz identidad como base para L
     U = A.copy()  # Copiamos A como base para U
     recap = {
-        'pasos': [],  
+        'Equivalentes': [],  
         'L': None,  
         'U': None   
     }
@@ -27,7 +27,7 @@ def lu_factorizacion(A):
             U[j] = U[j] - factor * U[i]  # Restamos el múltiplo de la fila i de la fila j para hacer cero en la posición (j, i)
             
             # Guardamos este paso en el recap
-            recap['pasos'].append({
+            recap['Equivalentes'].append({
                 'text': f"Restar {factor} * fila {i+1} a la fila {j+1} para hacer cero el elemento U[{j+1},{i+1}]",
                 'U': [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in U.tolist()],
                 'L': [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in L.tolist()]
