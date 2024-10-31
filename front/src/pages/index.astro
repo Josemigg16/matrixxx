@@ -6,8 +6,11 @@ import ShowMatrixes from '@/components/ShowMatrixes'
 
 <Layout>
   <h1>Astro</h1>
-  <main class='max-w-[100vw]'>
-    <MatrixForm client:visible />
+  <main class='max-w-[100vw] mb-80'>
+    <section class="grid grid-cols-2 place-content-center min-h-[600px]">
+      <MatrixForm client:visible />
+      <MatrixForm client:visible />
+    </section>
     <ShowMatrixes client:visible />
   </main>
 </Layout>
