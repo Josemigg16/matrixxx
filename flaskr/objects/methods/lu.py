@@ -8,33 +8,54 @@ def lu_factorizacion(A):
     n = len(A)
     L = np.eye(n, dtype=object)  # Matriz identidad como base para L
     U = A.copy()  # Copiamos A como base para U
+    P = np.eye(n, dtype=object)  # Matriz de permutación
     recap = {
-        'pasos': [],  
+        'Equivalentes': [],  
         'L': None,  
-        'U': None   
+        'U': None,
     }
+    hubo_intercambio = False  # Variable para detectar si hubo intercambios
     
     # Eliminar los elementos debajo de la diagonal (eliminación gaussiana)
     for i in range(n):
-        # Asegurarse de que no estamos dividiendo por cero
+        # Si el pivote es cero, buscamos intercambiar filas
         if U[i, i] == 0:
-            raise ValueError(f"El pivote en la posición ({i+1},{i+1}) es cero. Se requiere un pivote distinto de cero para la factorización LU.")
-        
+            for k in range(i+1, n):
+                if U[k, i] != 0:
+                    # Intercambiamos las filas i y k en U, L, y P
+                    U[[i, k]] = U[[k, i]]
+                    P[[i, k]] = P[[k, i]]
+                    if i > 0:  # Intercambiamos también en L, hasta la columna i
+                        L[[i, k], :i] = L[[k, i], :i]
+                    recap['Equivalentes'].append({
+                        'text': f"Intercambiar fila {i+1} con fila {k+1} debido a pivote cero",
+                        'U': [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in U.tolist()],
+                        'P': [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in P.tolist()]
+                    })
+                    hubo_intercambio = True
+                    break
+            else:
+                return json.dumps({'error': 'No se encontró un pivote no cero para la posición ({}, {})'.format(i+1, i+1)})
+
         # Hacer ceros debajo de la diagonal en la columna i
         for j in range(i+1, n):
-            factor = U[j, i] / U[i, i]  # Este es el número por el cual multiplicamos la fila i para eliminar el elemento U[j, i]
-            L[j, i] = factor  # Guardamos el factor en la matriz L
-            U[j] = U[j] - factor * U[i]  # Restamos el múltiplo de la fila i de la fila j para hacer cero en la posición (j, i)
-            
-            # Guardamos este paso en el recap
-            recap['pasos'].append({
-                'text': f"Restar {factor} * fila {i+1} a la fila {j+1} para hacer cero el elemento U[{j+1},{i+1}]",
+            factor = U[j, i] / U[i, i]
+            L[j, i] = factor
+            U[j] = U[j] - factor * U[i]
+            recap['Equivalentes'].append({
+                'text': f"Para hacer 0 el elemento U[{j+1}, {i+1}], y realizaremos la operacion Fila {j + 1} - ({factor}) * Fila {i + 1}",
                 'U': [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in U.tolist()],
-                'L': [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in L.tolist()]
+                'L': [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in L.tolist()],
+                'factor': f"{factor}"
             })
 
     # Convertimos las matrices L y U a fracciones legibles
     recap['L'] = [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in L.tolist()]
     recap['U'] = [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in U.tolist()]
+    
+    # Solo añadimos P al recap si hubo intercambios
+    if hubo_intercambio:
+        recap['P'] = [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in P.tolist()]
 
     return json.dumps(recap, indent=4)
+
