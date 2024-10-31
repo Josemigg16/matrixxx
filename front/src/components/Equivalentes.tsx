@@ -19,7 +19,7 @@ export default function Equivalentes({ matrix }: { matrix: OPMatrix }) {
 			{matrix.Equivalentes.slice(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE).map(
 				(equivalente, idx) => (
 					<li key={idx} class='border-t-2 border-gray-500 py-8'>
-						<h3 class='mb-8'>{equivalente.text}</h3>
+						<h3 class='mb-8 text-pretty max-w-[50ch] h-[60px]'>{equivalente.text}</h3>
 						<div class='flex items-center'>
 							<p class='text-4xl font-bold'>E{idx + 1 + pageIndex * PAGE_SIZE}=</p>
 							<MatrixComponent matrix={equivalente.matriz} />
