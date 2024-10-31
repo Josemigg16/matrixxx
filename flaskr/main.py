@@ -24,11 +24,15 @@ def upload():
     return Matrixxx(data).inverse()
 
 
-@api_blueprint.route('/lu')
+@api_blueprint.route('/lu', methods=['GET', 'POST'])
 def lu():
-    sampleMatrix= [[4, -2, 0], [-7, 4, 1], [1, 2, 3]]
-    data = Matrixxx(sampleMatrix).lu()
-    return jsonify(json.loads(data))
+    if request.method == 'GET':
+        sampleMatrix= [[4, -2, 0], [-7, 4, 1], [1, 2, 3]]
+        data = Matrixxx(sampleMatrix).lu()
+        return jsonify(json.loads(data))
+    elif request.method == 'POST':
+        data = request.get_json()
+        return Matrixxx(data).lu()
 
 app.register_blueprint(api_blueprint, url_prefix='/api')
 app.run(debug=True)
