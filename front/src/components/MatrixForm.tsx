@@ -1,44 +1,9 @@
-import { useEffect, useRef, useState } from 'preact/hooks'
+import useMatrixForm from '@/hooks/useMatrixForm'
 import Select from './Select'
-import type { FormEvent } from 'preact/compat'
-import { matrixStore } from '@/stores/MatrixStore'
+import OperationButtons from './OperationButtons'
 
 export default function MatrixForm() {
-	const [rows, setRows] = useState(3)
-	const [columns, setColumns] = useState(3)
-
-	const handleSubmit = async (e: FormEvent) => {
-		e.preventDefault()
-		const matrix: string[][] = []
-		const inputs = document.querySelector('tbody')
-		inputs?.querySelectorAll('tr').forEach((element) => {
-			const rowMatrix: string[] = []
-			element.querySelectorAll('input').forEach((element) => {
-				rowMatrix.push(element.value)
-			})
-			matrix.push(rowMatrix)
-		})
-		const fixedMatrix = matrix.map((row) =>
-			row.map((element) => (element.trim() === '' ? '0' : element.trim()))
-		)
-		console.log(fixedMatrix)
-		try {
-			const res = await fetch('http://localhost:5000/api/upload', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(fixedMatrix)
-			})
-			const newMatrix = await res.json()
-			console.log(res.json)
-			console.log('aaaaa')
-			matrixStore.set([...matrixStore.get(), newMatrix])
-		} catch (e) {
-			console.log(e)
-		}
-	}
-
+	const { rows, setRows, columns, setColumns, setOperacion, handleSubmit, tbody } = useMatrixForm()
 	return (
 		<article>
 			<form class='mx-auto mb-20 w-[300px] space-y-2'>
@@ -53,12 +18,7 @@ export default function MatrixForm() {
 			</form>
 			<form onSubmit={handleSubmit} class='mx-auto w-fit'>
 				<table>
-					<thead>
-						<tr>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody id='matrix-form'>
+					<tbody ref={tbody}>
 						{Array.from({ length: rows }).map((_, i) => {
 							return (
 								<tr>
@@ -78,12 +38,10 @@ export default function MatrixForm() {
 						})}
 					</tbody>
 				</table>
-				<button class='mt-2 block w-full rounded bg-gray-100 p-2 font-bold' type='submit'>
-					Submit
-				</button>
+				<OperationButtons setOperacion={setOperacion} />
 				<button
 					onClick={() => {
-						const inputs = document.getElementById('matrix-form')
+						const inputs = tbody.current as HTMLElement | null
 						inputs?.querySelectorAll('input').forEach((element) => {
 							element.value = Math.floor(Math.random() * 10).toString()
 						})
