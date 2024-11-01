@@ -3,8 +3,7 @@ import json
 import numpy as np
 
 def gauss_jordan(A):
-    # Convertimos la matriz A a un array de fracciones
-    original = A
+    original = [[f"{Fraction(x).numerator}/{Fraction(x).denominator}" for x in row] for row in A] 
     A = np.array([[Fraction(x) for x in row] for row in A], dtype=object)
     n = len(A)
     counter = 0
@@ -13,7 +12,7 @@ def gauss_jordan(A):
     identidad = np.array([[Fraction(x) for x in row] for row in identidad], dtype=object)
     Aumentada = np.hstack((A, identidad))
     recap = {
-        'Original': original.tolist(),
+        'Original': original,
         'Aumentada': [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in Aumentada.tolist()],
         'Equivalentes': [],
         'operacion': 'inversa'
