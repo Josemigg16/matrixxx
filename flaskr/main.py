@@ -16,13 +16,25 @@ def hello():
     matriz.show()
     return 'Hello, World!'
 
-@api_blueprint.route('/upload', methods=['POST'])
-def upload():
-    if request.is_json:
-        data = request.get_json()
-        print('recived data')
-    return Matrixxx(data).inverse()
-
+@api_blueprint.route('/inverse', methods=['GET', 'POST'])
+def inverse():
+    if request.method == 'GET':
+        sampleMatrix= [[4, -2, 0], [-7, 4, 1], [1, 2, 3]]
+        data = Matrixxx(sampleMatrix).inverse()
+        return jsonify(json.loads(data))
+    elif request.method == 'POST':
+        if request.is_json:
+            data = request.get_json()
+            try:
+                matrix_data = [[float(num) for num in row] for row in data]
+                print('Datos recibidos:', matrix_data)
+                print('Inversa calculada')
+                return Matrixxx(matrix_data).inverse()
+            except ValueError as e:
+                error_message = str(e)
+                return jsonify({"error": f"{error_message}"}), 401
+        else:
+            return jsonify({"error": "El cuerpo de la solicitud no es JSON."}), 400
 
 @api_blueprint.route('/lu', methods=['GET', 'POST'])
 def lu():

@@ -1,7 +1,7 @@
 export default function OperationButton({ setOperacion }: any) {
 	const operations = [{
 		name: 'Matriz Inversa',
-		endpoint: 'upload'
+		endpoint: 'inverse'
 	},{
 		name: 'Factorizacion LU',
 		endpoint: 'lu'
