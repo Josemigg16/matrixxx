@@ -1,8 +1,9 @@
 import numpy as np
 
 #importing methods
-from objects.methods.gaussJordan import gauss_jordan
-from objects.methods.lu import lu_factorizacion
+from methods.gaussJordan import gauss_jordan
+from methods.lu import lu_factorizacion
+from methods.gauss import gauss
 
 class Matrixxx:
     
