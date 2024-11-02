@@ -29,10 +29,10 @@ def inverse():
                 matrix_data = [[float(num) for num in row] for row in data]
                 print('Datos recibidos:', matrix_data)
                 print('Inversa calculada')
-                return Matrixxx(matrix_data).inverse()
+                return json(Matrixxx(matrix_data).inverse())
             except ValueError as e:
                 error_message = str(e)
-                return jsonify({"error": f"{error_message}"}), 401
+                return jsonify({"error": f"{error_message}"}), 400
         else:
             return jsonify({"error": "El cuerpo de la solicitud no es JSON."}), 400
 
