@@ -46,4 +46,4 @@ def gauss(A):
                 recap['Equivalentes'].append({'text': text, 'matriz': A.tolist()})
                 print(f"Matriz después de hacer cero el elemento A[{j + 1},{i + 1}]:\n", A)
 
-    return json.dumps(recap, indent=4)
+    return recap

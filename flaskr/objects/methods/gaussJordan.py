@@ -62,4 +62,4 @@ def gauss_jordan(A):
     
     recap['Inversa'] = [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in Aumentada[:,n:].tolist()]
     
-    return json.dumps(recap)
+    return recap
