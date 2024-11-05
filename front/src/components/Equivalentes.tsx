@@ -1,6 +1,7 @@
 import { useState } from 'preact/hooks'
 import MatrixComponent from './MatrixComponent'
 import type { OPMatrix } from '@/stores/MatrixStore'
+import HandleEquivalentes from './MatrixesComponents/HandleEquivalentes'
 const PAGE_SIZE = 3
 
 export default function Equivalentes({ matrix }: { matrix: OPMatrix }) {
@@ -9,7 +10,7 @@ export default function Equivalentes({ matrix }: { matrix: OPMatrix }) {
 	const CantidadEquivalentes = matrix.Equivalentes.length
 	const Pages = Math.ceil(CantidadEquivalentes / PAGE_SIZE)
 
-	const handlePageChange = (index) => {
+	const handlePageChange = (index: number) => {
 		if (index < 0) return
 		if (index >= Pages) return
 		setPageIndex(index)
@@ -19,10 +20,10 @@ export default function Equivalentes({ matrix }: { matrix: OPMatrix }) {
 			{matrix.Equivalentes.slice(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE).map(
 				(equivalente, idx) => (
 					<li key={idx} class='border-t-2 border-gray-500 py-8'>
-						<h3 class='mb-8 text-pretty max-w-[50ch] h-[60px]'>{equivalente.text}</h3>
+						<h3 class='mb-8 h-[60px] max-w-[50ch] text-pretty'>{equivalente.text}</h3>
 						<div class='flex items-center'>
 							<p class='text-4xl font-bold'>E{idx + 1 + pageIndex * PAGE_SIZE}=</p>
-							<MatrixComponent matrix={equivalente.matriz} />
+							<HandleEquivalentes equivalente={equivalente} operacion={matrix.operacion} />
 						</div>
 					</li>
 				)
@@ -31,15 +32,19 @@ export default function Equivalentes({ matrix }: { matrix: OPMatrix }) {
 				<button
 					disabled={pageIndex === 0}
 					onClick={() => handlePageChange(pageIndex - 1)}
-					class={`rounded bg-gray-300 px-3 py-1 text-black mx-2`}
+					class={`mx-2 rounded bg-gray-300 px-3 py-1 text-black`}
 				>
 					{'<'}
 				</button>
-				<ul class='flex justify-center gap-2 min-w-fit w-[250px]'>
+				<ul class='flex w-[250px] min-w-fit justify-center gap-2'>
 					{Array.from(
 						{ length: Pages },
 						(_, index) =>
-							(index === 0 || Math.abs(pageIndex - index) < 2 || index === Pages - 1 || (pageIndex <= 1 && index < 4) || (pageIndex > Pages - 3 && index > Pages - 5)) && (
+							(index === 0 ||
+								Math.abs(pageIndex - index) < 2 ||
+								index === Pages - 1 ||
+								(pageIndex <= 1 && index < 4) ||
+								(pageIndex > Pages - 3 && index > Pages - 5)) && (
 								<button
 									key={crypto.randomUUID()}
 									onClick={() => handlePageChange(index)}
@@ -53,7 +58,7 @@ export default function Equivalentes({ matrix }: { matrix: OPMatrix }) {
 				<button
 					disabled={pageIndex + 1 === Pages}
 					onClick={() => handlePageChange(pageIndex + 1)}
-					class={`rounded bg-gray-300 px-3 py-1 mx-5 text-black`}
+					class={`mx-5 rounded bg-gray-300 px-3 py-1 text-black`}
 				>
 					{'>'}
 				</button>

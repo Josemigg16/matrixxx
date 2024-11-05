@@ -32,7 +32,7 @@ export default function matrixFormHook() {
 				},
 				body: JSON.stringify(fixedMatrix)
 			})
-			const newMatrix = await res.json()
+			const newMatrix = await res.json() as never
 			console.log(res.json)
 			matrixStore.set([...matrixStore.get(), newMatrix])
 		} catch (e) {

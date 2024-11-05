@@ -3,7 +3,7 @@ import { useStore } from '@nanostores/preact'
 import { useEffect, useState } from 'preact/hooks'
 import MatrixComponent from './MatrixComponent'
 import Equivalentes from './Equivalentes'
-
+import HandleMatrix from './MatrixesComponents/HandleMatrix'
 
 const ShowMatrixes = () => {
 	const MatrixState = useStore(matrixStore)
@@ -13,7 +13,7 @@ const ShowMatrixes = () => {
 		MatrixState.map((a) => console.log(a))
 	}, [MatrixState])
 	return (
-		<ul class='mx-auto mt-20 flex flex-col items-start gap-4 px-10'>
+		<ul class='mx-auto mt-20 flex flex-col items-start gap-4 px-10 space-y-4'>
 			{MatrixState.toReversed().map((matrix, i) => (
 				<li class='relative flex flex-col bg-slate-700 px-8 py-2'>
 					<button
@@ -25,11 +25,7 @@ const ShowMatrixes = () => {
 					>
 						V
 					</button>
-					<div class='flex'>
-						<MatrixComponent matrix={matrix.Original} operacion={matrix.operacion} />
-						<p class='mr-4 flex items-center text-7xl'>{'='}</p>
-						<MatrixComponent matrix={matrix.Inversa} />
-					</div>
+					<HandleMatrix matrix={matrix} />
 
 					<ul class={`equivalentes-${i} mt-5 hidden`}>
 						{/* Pagina solo una parte de los equivalentes */}
