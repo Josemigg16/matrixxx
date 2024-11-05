@@ -4,15 +4,18 @@ import json
 
 def lu_factorizacion(A):
     # Convertimos la matriz A a un array de fracciones
+    original = [[f"{Fraction(x).numerator}/{Fraction(x).denominator}" for x in row] for row in A]
     A = np.array([[Fraction(x) for x in row] for row in A], dtype=object)
     n = len(A)
     L = np.eye(n, dtype=object)  # Matriz identidad como base para L
     U = A.copy()  # Copiamos A como base para U
     P = np.eye(n, dtype=object)  # Matriz de permutación
     recap = {
+        'Original': original,
         'Equivalentes': [],  
         'L': None,  
         'U': None,
+        'operacion': 'LU'
     }
     hubo_intercambio = False  # Variable para detectar si hubo intercambios
     
@@ -29,8 +32,9 @@ def lu_factorizacion(A):
                         L[[i, k], :i] = L[[k, i], :i]
                     recap['Equivalentes'].append({
                         'text': f"Intercambiar fila {i+1} con fila {k+1} debido a pivote cero",
-                        'U': [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in U.tolist()],
-                        'P': [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in P.tolist()]
+                        'P': [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in P.tolist()],
+                        'L': [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in L.tolist()],
+                        'U': [[f"{frac.numerator}/{frac.denominator}" for frac in row] for row in U.tolist()]
                     })
                     hubo_intercambio = True
                     break
